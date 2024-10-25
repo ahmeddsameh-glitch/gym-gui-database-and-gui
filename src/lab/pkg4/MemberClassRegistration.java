@@ -21,6 +21,10 @@ public class MemberClassRegistration implements Objects{
         this.registrationDate = date;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getMemberID() {
         return memberID;
     }
