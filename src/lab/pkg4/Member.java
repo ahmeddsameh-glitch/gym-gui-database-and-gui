@@ -8,11 +8,11 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Member {
+public class Member implements Objects {
 
     private String memberID, name, membershipType, email, phoneNumber, status;
 
-    public Member(String memberId, String name, String membershipType, String email, String phoneNumber, String status) {
+    public Member(String memberID, String name, String membershipType, String email, String phoneNumber, String status) {
         this.memberID = memberID;
         this.name = name;
         this.membershipType = membershipType;
@@ -21,11 +21,13 @@ public class Member {
         this.status = status;
     }
 
+    @Override
     public String lineRepresentation() {
         String data = memberID + ", " + name + ", " + membershipType + ", " + email + ", " + phoneNumber + ", " + status;
         return data;
     }
 
+    @Override
     public String getSearchKey() {
         return memberID;
     }

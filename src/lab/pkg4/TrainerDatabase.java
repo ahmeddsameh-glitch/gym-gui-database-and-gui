@@ -11,7 +11,7 @@ import java.io.*;
  *
  * @author amr
  */
-public class TrainerDatabase {
+public class TrainerDatabase implements Database<Trainer> {
 
     private String fileName;
     private List<Trainer> trainers = new ArrayList<>();
@@ -20,6 +20,7 @@ public class TrainerDatabase {
         this.fileName = fileName;
     }
 
+    @Override
     public void ReadFromFile() {
         try {
             File myFile = new File(fileName);
@@ -34,16 +35,19 @@ public class TrainerDatabase {
         }
     }
 
+    @Override
     public Trainer createRecordForm(String line) {
         String[] data = line.split(",");
         Trainer t = new Trainer(data[0].trim(), data[1].trim(), data[2].trim(), data[3].trim(), data[4].trim());
         return t;
     }
 
+    @Override
     public List<Trainer> returnAllRecords() {
         return trainers;
     }
 
+    @Override
     public Boolean contains(String key) {
         for (Trainer t : trainers) {
             if (t.getSearchKey().equals(key)) {
@@ -53,6 +57,7 @@ public class TrainerDatabase {
         return false;
     }
 
+    @Override
     public Trainer getRecord(String key) {
         for (Trainer t : trainers) {
             if (t.getSearchKey().equals(key)) {
@@ -62,8 +67,9 @@ public class TrainerDatabase {
         return null;
     }
 
+    @Override
     public void insertRecord(Trainer record) {
-
+    
         if (!contains(record.getSearchKey())) {
             trainers.add(record);
         } else {
@@ -72,18 +78,29 @@ public class TrainerDatabase {
 
     }
 
+    @Override
     public void deleteRecord(String key) {
 
-        for (Trainer t : trainers) {
+        boolean found = false;
+        Iterator<Trainer> iterator = trainers.iterator();
+
+        while (iterator.hasNext()) {
+            Trainer t = iterator.next();
             if (t.getSearchKey().equals(key)) {
-                trainers.remove(t);
-            } else {
-                System.out.println("No trainer match this Id");
+                iterator.remove();
+                found = true;
+                System.out.println("Trainer deleted successfully.");
+                return;
             }
+        }
+
+        if (!found) {
+            System.out.println("No trainer matches this Id");
         }
 
     }
 
+    @Override
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);

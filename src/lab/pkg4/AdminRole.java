@@ -14,6 +14,12 @@ public class AdminRole {
 
     private TrainerDatabase database;
 
+    public AdminRole() {
+        database = new TrainerDatabase("Trainers.txt");
+        database.ReadFromFile();
+    }
+    
+
     public void addTrainer(String trainerId, String name, String email, String speciality, String phoneNumber) {
         Trainer t = new Trainer(trainerId, name, email, speciality, phoneNumber);
         database.insertRecord(t);

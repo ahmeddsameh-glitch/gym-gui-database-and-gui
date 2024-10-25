@@ -11,7 +11,7 @@ import java.io.*;
  *
  * @author amr
  */
-public class ClassDatabase {
+public class ClassDatabase implements Database<Class>{
 
     private String fileName;
     private List<Class> classes = new ArrayList<>();
@@ -20,6 +20,7 @@ public class ClassDatabase {
         this.fileName = fileName;
     }
 
+    @Override
     public void ReadFromFile() {
         try {
             File myFile = new File(fileName);
@@ -34,16 +35,19 @@ public class ClassDatabase {
         }
     }
 
+    @Override
     public Class createRecordForm(String line) {
         String[] data = line.split(",");
         Class c = new Class(data[0].trim(), data[1].trim(), data[2].trim(), Integer.parseInt(data[3].trim()), Integer.parseInt(data[4].trim()));
         return c;
     }
 
+    @Override
     public List<Class> returnAllRecords() {
         return classes;
     }
 
+    @Override
     public Boolean contains(String key) {
         for (Class c : classes) {
             if (c.getSearchKey().equals(key)) {
@@ -53,6 +57,7 @@ public class ClassDatabase {
         return false;
     }
 
+    @Override
     public Class getRecord(String key) {
         for (Class c : classes) {
             if (c.getSearchKey().equals(key)) {
@@ -62,6 +67,7 @@ public class ClassDatabase {
         return null;
     }
 
+    @Override
     public void insertRecord(Class record) {
 
         if (!contains(record.getSearchKey())) {
@@ -72,18 +78,29 @@ public class ClassDatabase {
 
     }
 
+    @Override
     public void deleteRecord(String key) {
 
-        for (Class c : classes) {
+        boolean found = false;
+        Iterator<Class> iterator = classes.iterator();
+
+        while (iterator.hasNext()) {
+            Class c = iterator.next();
             if (c.getSearchKey().equals(key)) {
-                classes.remove(c);
-            } else {
-                System.out.println("No class match this Id");
+                iterator.remove();
+                found = true;
+                System.out.println("Record deleted successfully.");
+                return;
             }
+        }
+
+        if (!found) {
+            System.out.println("No class matches this Id");
         }
 
     }
 
+    @Override
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -91,7 +108,7 @@ public class ClassDatabase {
                 writer.write(c.lineRepresentation() + "\n");
             }
             writer.close();
-            System.out.println("Data updated Successfully");
+//            System.out.println("Data updated Successfully");
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file.");
 

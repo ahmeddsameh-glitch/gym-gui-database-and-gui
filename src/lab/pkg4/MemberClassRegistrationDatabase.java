@@ -5,6 +5,7 @@
 package lab.pkg4;
 
 import java.io.*;
+import java.time.LocalDate;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ import java.util.*;
  *
  * @author amr
  */
-public class MemberClassRegistrationDatabase {
+public class MemberClassRegistrationDatabase implements Database<MemberClassRegistration>{
 
     private String fileName;
     private List<MemberClassRegistration> memberClassRegistrations = new ArrayList<>();
@@ -21,6 +22,7 @@ public class MemberClassRegistrationDatabase {
         this.fileName = fileName;
     }
 
+    @Override
     public void ReadFromFile() {
         try {
             File myFile = new File(fileName);
@@ -35,18 +37,22 @@ public class MemberClassRegistrationDatabase {
         }
     }
 
+    @Override
     public MemberClassRegistration createRecordForm(String line) {
         String[] data = line.split(",");
         String[] formatedDate = data[2].split("-");
-        LocalDate d = new LocalDate(Integer.parseInt(formatedDate[0].trim()), Integer.parseInt(formatedDate[1].trim()), Integer.parseInt(formatedDate[2].trim()));
+        LocalDate d = LocalDate.parse(data[2].trim());
+//        LocalDate d = LocalDate.of(Integer.parseInt(formatedDate[0].trim()), Integer.parseInt(formatedDate[1].trim()), Integer.parseInt(formatedDate[2].trim()));
         MemberClassRegistration mCR = new MemberClassRegistration(data[0].trim(), data[1].trim(), data[3].trim(), d);
         return mCR;
     }
 
+    @Override
     public List<MemberClassRegistration> returnAllRecords() {
         return memberClassRegistrations;
     }
 
+    @Override
     public Boolean contains(String key) {
         for (MemberClassRegistration mCR : memberClassRegistrations) {
             if (mCR.getSearchKey().equals(key)) {
@@ -56,6 +62,7 @@ public class MemberClassRegistrationDatabase {
         return false;
     }
 
+    @Override
     public MemberClassRegistration getRecord(String key) {
         for (MemberClassRegistration mCR : memberClassRegistrations) {
             if (mCR.getSearchKey().equals(key)) {
@@ -65,6 +72,7 @@ public class MemberClassRegistrationDatabase {
         return null;
     }
 
+    @Override
     public void insertRecord(MemberClassRegistration record) {
 
         if (!contains(record.getSearchKey())) {
@@ -75,18 +83,29 @@ public class MemberClassRegistrationDatabase {
 
     }
 
+    @Override
     public void deleteRecord(String key) {
 
-        for (MemberClassRegistration mCR : memberClassRegistrations) {
-            if (mCR.getSearchKey().equals(key)) {
-                memberClassRegistrations.remove(mCR);
-            } else {
-                System.out.println("No class match this Id");
-            }
+       boolean found = false;
+    Iterator<MemberClassRegistration> iterator = memberClassRegistrations.iterator();
+    
+    while (iterator.hasNext()) {
+        MemberClassRegistration mCR = iterator.next();
+        if (mCR.getSearchKey().equals(key)) {
+            iterator.remove(); 
+            found = true;
+            System.out.println("Class registration deleted successfully.");
+            return; 
         }
+    }
+    
+    if (!found) {
+        System.out.println("No class matches this Id");
+    }
 
     }
 
+    @Override
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -94,7 +113,7 @@ public class MemberClassRegistrationDatabase {
                 writer.write(mCR.lineRepresentation() + "\n");
             }
             writer.close();
-            System.out.println("Data updated Successfully");
+//            System.out.println("Data updated Successfully");
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file.");
 

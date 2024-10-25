@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Trainer {
+public class Trainer implements Objects{
 
     private String trainerId, name, email, speciality, phoneNumber;
 
@@ -20,11 +20,13 @@ public class Trainer {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
     public String lineRepresentation() {
         String data = trainerId + ", " + name + ", " + email + ", " + speciality + ", " + phoneNumber;
         return data;
     }
 
+    @Override
     public String getSearchKey() {
         return trainerId;
     }

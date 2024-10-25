@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Class {
+public class Class implements Objects {
 
     private String classID, className, trainerID;
     private int duration, availableSeats;
@@ -29,11 +29,13 @@ public class Class {
         this.availableSeats = availableSeats;
     }
 
+    @Override
     public String lineRepresentation() {
         String data = classID + ", " + className + ", " + trainerID + ", " + duration + ", " + availableSeats;
         return data;
     }
 
+    @Override
     public String getSearchKey() {
         return classID;
     }

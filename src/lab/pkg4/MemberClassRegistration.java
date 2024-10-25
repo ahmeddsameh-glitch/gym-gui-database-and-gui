@@ -3,21 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package lab.pkg4;
+import java.time.LocalDate;
 
 /**
  *
  * @author amr
  */
-public class MemberClassRegistration {
+public class MemberClassRegistration implements Objects{
 
     private String memberID, classID, status;
-    private LocalDate date;
+    private LocalDate registrationDate;
 
     public MemberClassRegistration(String memberID, String classID, String status, LocalDate date) {
         this.memberID = memberID;
         this.classID = classID;
         this.status = status;
-        this.date = date;
+        this.registrationDate = date;
     }
 
     public String getMemberID() {
@@ -29,15 +30,17 @@ public class MemberClassRegistration {
     }
 
     public LocalDate getRegistrationDate() {
-        return date;
+        return registrationDate;
     }
 
+    @Override
     public String getSearchKey() {
         return memberID + classID;
     }
 
+    @Override
     public String lineRepresentation() {
-        String data = memberID + ", " + classID + ", " + date.getYear() + "-" + date.getMonth() + "-" + date.getDay() + ", " + status;
+        String data = memberID + ", " + classID + ", " + registrationDate + ", " + status;
         return data;
     }
 
