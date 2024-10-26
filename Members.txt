@@ -1,2 +1,3 @@
 M5, Amr, Silver, amr@gmail.com, 123456, active
 M6, Amr, Silver, amr@gmail.com, 123456, active
+M7, Amr, Silver, amr@gmail.com, 123456, active

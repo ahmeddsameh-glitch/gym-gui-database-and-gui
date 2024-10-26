@@ -21,9 +21,6 @@ public class Member implements Objects {
         this.status = status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     @Override
     public String lineRepresentation() {

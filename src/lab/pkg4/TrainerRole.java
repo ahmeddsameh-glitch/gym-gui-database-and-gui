@@ -51,7 +51,7 @@ public class TrainerRole {
         int seats = classDatabase.getRecord(classID).getAvailableSeats();
         if (seats > 0) {
             MemberClassRegistration mCR = new MemberClassRegistration(memberID, classID, "active", registrationDate);
-            memberDatabase.getRecord(memberID).setStatus("active");
+//            memberDatabase.getRecord(memberID).setStatus("active");
             registrationDatabase.insertRecord(mCR);
             classDatabase.getRecord(classID).setAvailableSeats(seats - 1);
             return true;
