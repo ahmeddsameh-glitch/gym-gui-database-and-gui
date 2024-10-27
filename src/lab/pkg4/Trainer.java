@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Trainer implements Objects{
+public class Trainer implements Identifiables{
 
     private String trainerId, name, email, speciality, phoneNumber;
 

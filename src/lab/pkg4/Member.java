@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Member implements Objects {
+public class Member implements Identifiables {
 
     private String memberID, name, membershipType, email, phoneNumber, status;
 

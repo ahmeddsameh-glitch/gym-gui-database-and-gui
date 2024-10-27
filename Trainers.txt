@@ -1,4 +1,0 @@
-T2, Amr, amr@gmail.com, fitnes, 123456
-T3, Amr, amr@gmail.com, fitnes, 123456
-T5, Amr, amr@gmail.com, fitnes, 123456
-T7, Amr, amr@gmail.com, fitnes, 123456

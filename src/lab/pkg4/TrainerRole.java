@@ -13,11 +13,11 @@ import java.time.temporal.ChronoUnit;
  * @author amr
  */
 public class TrainerRole {
-    
+
     private MemberDatabase memberDatabase;
     private ClassDatabase classDatabase;
     private MemberClassRegistrationDatabase registrationDatabase;
-    
+
     public TrainerRole() {
         memberDatabase = new MemberDatabase("Members.txt");
         memberDatabase.ReadFromFile();
@@ -26,69 +26,79 @@ public class TrainerRole {
         registrationDatabase = new MemberClassRegistrationDatabase("Registration.txt");
         registrationDatabase.ReadFromFile();
     }
-    
+
     public void addMember(String memberID, String name, String membershipType, String email, String phoneNumber, String status) {
-        
+
         Member m = new Member(memberID, name, membershipType, email, phoneNumber, status);
         memberDatabase.insertRecord(m);
-        
+
     }
-    
+
     public List<Member> getListOfMembers() {
         return memberDatabase.returnAllRecords();
     }
-    
+
     public void addClass(String classID, String className, String trainerID, int duration, int maxParticipants) {
         Class c = new Class(classID, className, trainerID, duration, maxParticipants);
         classDatabase.insertRecord(c);
     }
-    
+
     public List<Class> getListOfClasses() {
         return classDatabase.returnAllRecords();
     }
-    
+
     public Boolean registerMemberForClass(String memberID, String classID, LocalDate registrationDate) {
+        if (classDatabase.getRecord(classID) == null || memberDatabase.getRecord(memberID) == null || registrationDatabase.contains(memberID + classID)) {
+            return false;
+        }
         int seats = classDatabase.getRecord(classID).getAvailableSeats();
         if (seats > 0) {
             MemberClassRegistration mCR = new MemberClassRegistration(memberID, classID, "active", registrationDate);
-//            memberDatabase.getRecord(memberID).setStatus("active");
+            if (!registrationDate.equals(LocalDate.now())) {
+                return false;
+            }
             registrationDatabase.insertRecord(mCR);
             classDatabase.getRecord(classID).setAvailableSeats(seats - 1);
             return true;
         }
         return false;
-        
+
     }
-    
+
     public Boolean cancelRegistration(String memberID, String classID) {
+
+        if (classDatabase.getRecord(classID) == null || memberDatabase.getRecord(memberID) == null) {
+            return false;
+
+        }
         int seats = classDatabase.getRecord(classID).getAvailableSeats();
-        MemberClassRegistration mCR = registrationDatabase.getRecord(memberID + classID);
-        
-        if (true) {
+        MemberClassRegistration mCR = registrationDatabase.getRecord(memberID + "-" + classID);
+
+        if (mCR != null) {
             LocalDate d = mCR.getRegistrationDate();
             long daysDifference = ChronoUnit.DAYS.between(d, LocalDate.now());
-            
+
             if (daysDifference <= 3) {
-                
-                mCR.setStatus("cancelled");  
+
+                mCR.setStatus("cancelled");
 //                registrationDatabase.deleteRecord(memberID + classID);
                 classDatabase.getRecord(classID).setAvailableSeats(seats + 1);
             }
             return true;
         }
         return false;
-        
+
     }
-    
+
     public List<MemberClassRegistration> getListOfRegistrations() {
         return registrationDatabase.returnAllRecords();
     }
-    
+
     public void logout() {
         memberDatabase.saveToFile();
         classDatabase.saveToFile();
         registrationDatabase.saveToFile();
         System.out.println("Data updated Successfully");
-        
+
     }
 }

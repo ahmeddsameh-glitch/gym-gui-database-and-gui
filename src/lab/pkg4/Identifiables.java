@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public interface Objects {
+public interface Identifiables {
     String lineRepresentation();
     String getSearchKey();
     

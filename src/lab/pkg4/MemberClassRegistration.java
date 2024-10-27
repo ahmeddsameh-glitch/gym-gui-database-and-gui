@@ -3,13 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package lab.pkg4;
+
 import java.time.LocalDate;
 
 /**
  *
  * @author amr
  */
-public class MemberClassRegistration implements Objects{
+public class MemberClassRegistration implements Identifiables {
 
     private String memberID, classID, status;
     private LocalDate registrationDate;
@@ -39,7 +40,7 @@ public class MemberClassRegistration implements Objects{
 
     @Override
     public String getSearchKey() {
-        return memberID + classID;
+        return memberID + "-" + classID;
     }
 
     @Override

@@ -8,7 +8,7 @@ package lab.pkg4;
  *
  * @author amr
  */
-public class Class implements Objects {
+public class Class implements Identifiables {
 
     private String classID, className, trainerID;
     private int duration, availableSeats;
