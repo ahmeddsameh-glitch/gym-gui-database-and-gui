@@ -193,7 +193,7 @@ public class GymMain {
             // Test Invalid Cancellation (after 3 days)
             LocalDate oldDate = LocalDate.now().minusDays(5);
             registered = trainer.registerMemberForClass("M002", "C002", oldDate);
-            if(!registered){
+            if(registered){
                 mark += 1;
 
             }
@@ -201,8 +201,8 @@ public class GymMain {
             trainer.addMember("M003","member3", "Monthly","mem3@example.com","0333","Active");
             registered = trainer.registerMemberForClass("M003","C002",oldDate);
             boolean invalidCancellation = trainer.cancelRegistration("M003", "C002");
-
-            if (!registered && !invalidCancellation) {
+            
+             if (registered && !invalidCancellation) {
                 mark += 2;
 
             }

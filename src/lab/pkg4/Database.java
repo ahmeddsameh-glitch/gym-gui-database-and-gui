@@ -4,6 +4,7 @@
  */
 package lab.pkg4;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,22 +12,30 @@ import java.util.List;
  * @author amr
  * @param <D>
  */
-public interface Database<D> {
+public abstract class Database<D> {
 
-    public void ReadFromFile();
+    protected String fileName;
+    protected List<D> records = new ArrayList<>();
 
-    public D createRecordForm(String line);
+    public Database(String fileName) {
+        this.fileName = fileName;
+    }
 
-    public List<D> returnAllRecords();
+    public abstract void readFromFile();
 
-    public Boolean contains(String key);
+    public abstract D createRecordFrom(String line);
 
-    public D getRecord(String key);
+    public abstract List<D> returnAllRecords();
 
-    public void insertRecord(D record);
+    public abstract Boolean contains(String key);
 
-    public void deleteRecord(String key);
+    public abstract D getRecord(String key);
 
-    public void saveToFile();
+    public abstract void insertRecord(D record);
 
+    public abstract void deleteRecord(String key);
+
+    public abstract void saveToFile();
+    
+    
 }

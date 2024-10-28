@@ -13,23 +13,20 @@ import java.util.*;
  *
  * @author amr
  */
-public class MemberClassRegistrationDatabase implements Database<MemberClassRegistration>{
-
-    private String fileName;
-    private List<MemberClassRegistration> memberClassRegistrations = new ArrayList<>();
+public class MemberClassRegistrationDatabase extends Database<MemberClassRegistration> {
 
     public MemberClassRegistrationDatabase(String fileName) {
-        this.fileName = fileName;
+        super(fileName);
     }
 
     @Override
-    public void ReadFromFile() {
+    public void readFromFile() {
         try {
             File myFile = new File(fileName);
             Scanner scanner = new Scanner(myFile);
             while (scanner.hasNextLine()) {
-                MemberClassRegistration mCR = createRecordForm(scanner.nextLine());
-                memberClassRegistrations.add(mCR);
+                MemberClassRegistration mCR = createRecordFrom(scanner.nextLine());
+                records.add(mCR);
             }
             scanner.close();
         } catch (FileNotFoundException error) {
@@ -38,7 +35,7 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
     }
 
     @Override
-    public MemberClassRegistration createRecordForm(String line) {
+    public MemberClassRegistration createRecordFrom(String line) {
         String[] data = line.split(",");
         String[] formatedDate = data[2].split("-");
         LocalDate d = LocalDate.parse(data[2].trim());
@@ -49,12 +46,12 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
 
     @Override
     public List<MemberClassRegistration> returnAllRecords() {
-        return memberClassRegistrations;
+        return records;
     }
 
     @Override
     public Boolean contains(String key) {
-        for (MemberClassRegistration mCR : memberClassRegistrations) {
+        for (MemberClassRegistration mCR : records) {
             if (mCR.getSearchKey().equals(key)) {
                 return true;
             }
@@ -64,7 +61,7 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
 
     @Override
     public MemberClassRegistration getRecord(String key) {
-        for (MemberClassRegistration mCR : memberClassRegistrations) {
+        for (MemberClassRegistration mCR : records) {
             if (mCR.getSearchKey().equals(key)) {
                 return mCR;
             }
@@ -76,7 +73,7 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
     public void insertRecord(MemberClassRegistration record) {
 
         if (!contains(record.getSearchKey())) {
-            memberClassRegistrations.add(record);
+            records.add(record);
         } else {
             System.out.println("Class already exists");
         }
@@ -86,22 +83,22 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
     @Override
     public void deleteRecord(String key) {
 
-       boolean found = false;
-    Iterator<MemberClassRegistration> iterator = memberClassRegistrations.iterator();
-    
-    while (iterator.hasNext()) {
-        MemberClassRegistration mCR = iterator.next();
-        if (mCR.getSearchKey().equals(key)) {
-            iterator.remove(); 
-            found = true;
-            System.out.println("Class registration deleted successfully.");
-            return; 
+        boolean found = false;
+        Iterator<MemberClassRegistration> iterator = records.iterator();
+
+        while (iterator.hasNext()) {
+            MemberClassRegistration mCR = iterator.next();
+            if (mCR.getSearchKey().equals(key)) {
+                iterator.remove();
+                found = true;
+                System.out.println("Class registration deleted successfully.");
+                return;
+            }
         }
-    }
-    
-    if (!found) {
-        System.out.println("No class matches this Id");
-    }
+
+        if (!found) {
+            System.out.println("No class matches this Id");
+        }
 
     }
 
@@ -109,7 +106,7 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);
-            for (MemberClassRegistration mCR : memberClassRegistrations) {
+            for (MemberClassRegistration mCR : records) {
                 writer.write(mCR.lineRepresentation() + "\n");
             }
             writer.close();
@@ -121,4 +118,5 @@ public class MemberClassRegistrationDatabase implements Database<MemberClassRegi
 
     }
 
+   
 }

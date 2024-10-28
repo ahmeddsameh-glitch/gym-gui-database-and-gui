@@ -11,23 +11,23 @@ import java.io.*;
  *
  * @author amr
  */
-public class ClassDatabase implements Database<Class>{
+public class ClassDatabase extends Database<Class>{
 
-    private String fileName;
-    private List<Class> classes = new ArrayList<>();
+  
 
-    public ClassDatabase(String fileName) {
-        this.fileName = fileName;
+  public ClassDatabase(String fileName) {
+        super(fileName); 
     }
 
+
     @Override
-    public void ReadFromFile() {
+    public void readFromFile() {
         try {
             File myFile = new File(fileName);
             Scanner scanner = new Scanner(myFile);
             while (scanner.hasNextLine()) {
-                Class c = createRecordForm(scanner.nextLine());
-                classes.add(c);
+                Class c = createRecordFrom(scanner.nextLine());
+                records.add(c);
             }
             scanner.close();
         } catch (FileNotFoundException error) {
@@ -36,7 +36,7 @@ public class ClassDatabase implements Database<Class>{
     }
 
     @Override
-    public Class createRecordForm(String line) {
+    public Class createRecordFrom(String line) {
         String[] data = line.split(",");
         Class c = new Class(data[0].trim(), data[1].trim(), data[2].trim(), Integer.parseInt(data[3].trim()), Integer.parseInt(data[4].trim()));
         return c;
@@ -44,12 +44,12 @@ public class ClassDatabase implements Database<Class>{
 
     @Override
     public List<Class> returnAllRecords() {
-        return classes;
+        return records;
     }
 
     @Override
     public Boolean contains(String key) {
-        for (Class c : classes) {
+        for (Class c : records) {
             if (c.getSearchKey().equals(key)) {
                 return true;
             }
@@ -59,7 +59,7 @@ public class ClassDatabase implements Database<Class>{
 
     @Override
     public Class getRecord(String key) {
-        for (Class c : classes) {
+        for (Class c : records) {
             if (c.getSearchKey().equals(key)) {
                 return c;
             }
@@ -71,7 +71,7 @@ public class ClassDatabase implements Database<Class>{
     public void insertRecord(Class record) {
 
         if (!contains(record.getSearchKey())) {
-            classes.add(record);
+            records.add(record);
         } else {
             System.out.println("Class already exists");
         }
@@ -82,7 +82,7 @@ public class ClassDatabase implements Database<Class>{
     public void deleteRecord(String key) {
 
         boolean found = false;
-        Iterator<Class> iterator = classes.iterator();
+        Iterator<Class> iterator = records.iterator();
 
         while (iterator.hasNext()) {
             Class c = iterator.next();
@@ -104,7 +104,7 @@ public class ClassDatabase implements Database<Class>{
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);
-            for (Class c : classes) {
+            for (Class c : records) {
                 writer.write(c.lineRepresentation() + "\n");
             }
             writer.close();

@@ -16,7 +16,7 @@ public class AdminRole {
 
     public AdminRole() {
         database = new TrainerDatabase("Trainers.txt");
-        database.ReadFromFile();
+        database.readFromFile();
     }
     
 

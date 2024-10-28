@@ -20,11 +20,11 @@ public class TrainerRole {
 
     public TrainerRole() {
         memberDatabase = new MemberDatabase("Members.txt");
-        memberDatabase.ReadFromFile();
+        memberDatabase.readFromFile();
         classDatabase = new ClassDatabase("Class.txt");
-        classDatabase.ReadFromFile();
+        classDatabase.readFromFile();
         registrationDatabase = new MemberClassRegistrationDatabase("Registration.txt");
-        registrationDatabase.ReadFromFile();
+        registrationDatabase.readFromFile();
     }
 
     public void addMember(String memberID, String name, String membershipType, String email, String phoneNumber, String status) {
@@ -54,9 +54,7 @@ public class TrainerRole {
         int seats = classDatabase.getRecord(classID).getAvailableSeats();
         if (seats > 0) {
             MemberClassRegistration mCR = new MemberClassRegistration(memberID, classID, "active", registrationDate);
-            if (!registrationDate.equals(LocalDate.now())) {
-                return false;
-            }
+
             registrationDatabase.insertRecord(mCR);
             classDatabase.getRecord(classID).setAvailableSeats(seats - 1);
             return true;
@@ -67,7 +65,7 @@ public class TrainerRole {
 
     public Boolean cancelRegistration(String memberID, String classID) {
 
-        if (classDatabase.getRecord(classID) == null || memberDatabase.getRecord(memberID) == null) {
+        if (registrationDatabase.getRecord(memberID + "-" + classID) == null) {
             return false;
 
         }
@@ -77,16 +75,16 @@ public class TrainerRole {
         if (mCR != null) {
             LocalDate d = mCR.getRegistrationDate();
             long daysDifference = ChronoUnit.DAYS.between(d, LocalDate.now());
-
             if (daysDifference <= 3) {
-
                 mCR.setStatus("cancelled");
-//                registrationDatabase.deleteRecord(memberID + classID);
                 classDatabase.getRecord(classID).setAvailableSeats(seats + 1);
+            } else {
+                return false;
             }
-            return true;
+        } else {
+            return false;
         }
-        return false;
+        return true;
 
     }
 

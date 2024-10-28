@@ -11,23 +11,22 @@ import java.io.*;
  *
  * @author amr
  */
-public class MemberDatabase implements Database<Member> {
+public class MemberDatabase extends Database<Member> {
 
-    private String fileName;
-    private List<Member> members = new ArrayList<>();
+  
 
     public MemberDatabase(String fileName) {
-        this.fileName = fileName;
+        super(fileName);
     }
 
     @Override
-    public void ReadFromFile() {
+    public void readFromFile() {
         try {
             File myFile = new File(fileName);
             Scanner scanner = new Scanner(myFile);
             while (scanner.hasNextLine()) {
-                Member m = createRecordForm(scanner.nextLine());
-                members.add(m);
+                Member m = createRecordFrom(scanner.nextLine());
+                records.add(m);
             }
             scanner.close();
         } catch (FileNotFoundException error) {
@@ -36,7 +35,7 @@ public class MemberDatabase implements Database<Member> {
     }
 
     @Override
-    public Member createRecordForm(String line) {
+    public Member createRecordFrom(String line) {
         String[] data = line.split(",");
         Member m = new Member(data[0].trim(), data[1].trim(), data[2].trim(), data[3].trim(), data[4].trim(), data[5].trim());
         return m;
@@ -44,12 +43,12 @@ public class MemberDatabase implements Database<Member> {
 
     @Override
     public List<Member> returnAllRecords() {
-        return members;
+        return records;
     }
 
     @Override
     public Boolean contains(String key) {
-        for (Member m : members) {
+        for (Member m : records) {
             if (m.getSearchKey().equals(key)) {
                 return true;
             }
@@ -59,7 +58,7 @@ public class MemberDatabase implements Database<Member> {
 
     @Override
     public Member getRecord(String key) {
-        for (Member m : members) {
+        for (Member m : records) {
             if (m.getSearchKey().equals(key)) {
                 return m;
             }
@@ -71,7 +70,7 @@ public class MemberDatabase implements Database<Member> {
     public void insertRecord(Member record) {
 
         if (!contains(record.getSearchKey())) {
-            members.add(record);
+            records.add(record);
         } else {
             System.out.println("Member already exists");
         }
@@ -82,7 +81,7 @@ public class MemberDatabase implements Database<Member> {
     public void deleteRecord(String key) {
 
         boolean found = false;
-        Iterator<Member> iterator = members.iterator();
+        Iterator<Member> iterator = records.iterator();
 
         while (iterator.hasNext()) {
             Member m = iterator.next();
@@ -100,7 +99,7 @@ public class MemberDatabase implements Database<Member> {
     public void saveToFile() {
         try {
             FileWriter writer = new FileWriter(fileName);
-            for (Member m : members) {
+            for (Member m : records) {
                 writer.write(m.lineRepresentation() + "\n");
             }
             writer.close();
