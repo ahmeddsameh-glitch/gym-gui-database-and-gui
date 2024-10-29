@@ -85,18 +85,21 @@ public class GymMain {
             trainer.addMember("M001", "John", "Monthly", "john@gmail.com", "0123456789", "active");
             if (trainer.getListOfMembers().size() == 1) {
                 mark += 0.5; // 1 Mark
+
             }
 
             // Duplicate Member Test
             trainer.addMember("M001", "John", "Monthly", "john@gmail.com", "0123456789", "active");
             if (trainer.getListOfMembers().size() == 1) {
                 mark += 0.5;
+
             }
 
 
             // Verify Member Data Test
             if (trainer.getListOfMembers().get(0).getSearchKey().equals("M001")) {
                 mark += 1;
+
             }
             trainer.logout();
 

@@ -78,13 +78,10 @@ public class TrainerRole {
             if (daysDifference <= 3) {
                 mCR.setStatus("cancelled");
                 classDatabase.getRecord(classID).setAvailableSeats(seats + 1);
-            } else {
-                return false;
+                return true;
             }
-        } else {
-            return false;
         }
-        return true;
+        return false;
 
     }
 
