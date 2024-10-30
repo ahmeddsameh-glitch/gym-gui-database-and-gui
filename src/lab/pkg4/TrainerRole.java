@@ -54,7 +54,7 @@ public class TrainerRole {
         int seats = classDatabase.getRecord(classID).getAvailableSeats();
         if (seats > 0) {
             MemberClassRegistration mCR = new MemberClassRegistration(memberID, classID, "active", registrationDate);
-
+              
             registrationDatabase.insertRecord(mCR);
             classDatabase.getRecord(classID).setAvailableSeats(seats - 1);
             return true;
@@ -76,7 +76,10 @@ public class TrainerRole {
             LocalDate d = mCR.getRegistrationDate();
             long daysDifference = ChronoUnit.DAYS.between(d, LocalDate.now());
             if (daysDifference <= 3) {
+                System.out.println(memberID+classID);
+                
                 mCR.setStatus("cancelled");
+                System.out.println("settt"+mCR.getStatus());
                 classDatabase.getRecord(classID).setAvailableSeats(seats + 1);
                 return true;
             }

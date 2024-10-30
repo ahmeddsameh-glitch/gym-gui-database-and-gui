@@ -26,6 +26,10 @@ public class MemberClassRegistration implements Identifiables {
         this.status = status;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public String getMemberID() {
         return memberID;
     }
